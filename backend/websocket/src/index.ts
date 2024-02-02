@@ -122,6 +122,8 @@ const setRandomInterval = (minDelay: any, maxDelay: any) => {
 		const delay =
 			Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay
 
+		console.log('Sleeping for', delay / 1000, 'seconds')
+
 		timeout = setTimeout(timeoutFunction, delay)
 	}
 
