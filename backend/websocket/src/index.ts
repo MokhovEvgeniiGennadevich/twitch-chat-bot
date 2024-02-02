@@ -8,6 +8,7 @@ type configType = {
 	CHANNEL: string
 	TIMEOUT_MIN: number
 	TIMEOUT_MAX: number
+	FILE: string
 }
 
 let config: configType = {
@@ -16,6 +17,7 @@ let config: configType = {
 	CHANNEL: '',
 	TIMEOUT_MIN: 0,
 	TIMEOUT_MAX: 0,
+	FILE: '',
 }
 
 if (!process.env.USERNAME) {
@@ -53,9 +55,20 @@ if (!process.env.TIMEOUT_MAX) {
 	config.TIMEOUT_MAX = parseInt(process.env.TIMEOUT_MAX)
 }
 
+if (!process.env.FILE) {
+	console.log('Error: Config: FILE not set')
+	process.exit()
+} else {
+	config.FILE = process.env.FILE
+}
+
+console.log('Config successfully loaded')
+
 // Read strings from text file
 
-const messages = fs.readFileSync('./result.txt', 'utf8').split('\n')
+const messages = fs.readFileSync('messages/' + config.FILE, 'utf8').split('\n')
+
+console.log('Messages successfully loaded. There are', messages.length)
 
 const client = new tmi.Client({
 	options: { debug: false },
@@ -65,12 +78,14 @@ const client = new tmi.Client({
 	},
 	identity: {
 		username: config.USERNAME,
-		password: 'oauth:' + config.PASSWORD,
+		password: config.PASSWORD,
 	},
 	channels: [config.CHANNEL],
 })
 
 client.connect()
+
+client.on('message', (channel: any, tags: any, message: any, self: any) => {})
 
 // client.on('message', (channel: any, tags: any, message: any, self: any) => {
 // Ignore echoed messages.
