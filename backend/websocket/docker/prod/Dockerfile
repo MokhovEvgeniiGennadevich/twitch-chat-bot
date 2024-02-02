@@ -44,5 +44,5 @@ COPY --from=builder --chown=app:nodejs /app/dist ./
 
 USER app
 
-# Run app
-CMD ["node", "index.js"]
+# Run App
+CMD ["node", "./dist/index.js"]
