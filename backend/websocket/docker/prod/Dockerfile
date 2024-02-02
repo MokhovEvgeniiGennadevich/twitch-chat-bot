@@ -6,15 +6,9 @@ FROM base AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
-# Install dependencies based on the preferred package manager
-COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
-RUN \
-  if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
-  elif [ -f package-lock.json ]; then npm ci; \
-  elif [ -f pnpm-lock.yaml ]; then yarn global add pnpm && pnpm i --frozen-lockfile; \
-  else echo "Lockfile not found." && exit 1; \
-  fi
-
+# Copy Lock Files to install dependencies
+COPY package.json package-lock.json ./
+RUN npm i
 
 # Rebuild the source code only when needed
 FROM base AS builder
@@ -40,7 +34,7 @@ RUN chown app:nodejs dist
 
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing
-COPY --from=builder --chown=app:nodejs /app/dist ./
+COPY --from=builder --chown=app:nodejs ./ ./
 
 USER app
 
