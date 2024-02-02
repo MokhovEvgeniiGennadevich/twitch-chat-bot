@@ -36,10 +36,10 @@ npm install --save-dev ts-node nodemon
 
 ```js
 {
-  "watch": ["src"],
-  "ext": ".ts,.js",
-  "ignore": [],
-  "exec": "npx ts-node ./src/index.ts"
+	"watch": ["src"],
+	"ext": ".ts,.js",
+	"ignore": [],
+	"exec": "npx dotenv -e .env -- ts-node ./src/index.ts"
 }
 ```
 
