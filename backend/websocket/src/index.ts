@@ -160,9 +160,9 @@ setRandomInterval(config.TIMEOUT_MIN * 1000, config.TIMEOUT_MAX * 1000)
 
 function chatMessage() {
 	// 3 = 0, 1, 2
-	const choice = Math.floor(Math.random() * 4)
+	const choice = Math.floor(Math.random() * 6)
 
-	// Message with ONE smile
+	// Message with ONE smile END
 	if (choice === 0) {
 		const randomMessage = Math.floor(Math.random() * messages.length)
 		const message = messages[randomMessage]
@@ -173,8 +173,19 @@ function chatMessage() {
 		return message + ' ' + smile
 	}
 
-	// One random smile
+	// Message with ONE smile START
 	if (choice === 1) {
+		const randomMessage = Math.floor(Math.random() * messages.length)
+		const message = messages[randomMessage]
+
+		const randomSmile = Math.floor(Math.random() * smiles.length)
+		const smile = smiles[randomSmile]
+
+		return smile + ' ' + message
+	}
+
+	// One random smile
+	if (choice === 2) {
 		const randomSmile = Math.floor(Math.random() * smiles.length)
 		const smile = smiles[randomSmile]
 
@@ -182,7 +193,7 @@ function chatMessage() {
 	}
 
 	// Two random smiles
-	if (choice === 2) {
+	if (choice === 3) {
 		return (
 			smiles[Math.floor(Math.random() * smiles.length)] +
 			' ' +
@@ -191,7 +202,7 @@ function chatMessage() {
 	}
 
 	// Three identical smiles
-	if (choice === 3) {
+	if (choice === 4) {
 		const randomSmile = Math.floor(Math.random() * smiles.length)
 		const smile = smiles[randomSmile]
 
