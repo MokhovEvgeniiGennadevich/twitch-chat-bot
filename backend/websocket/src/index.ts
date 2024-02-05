@@ -160,7 +160,8 @@ setRandomInterval(config.TIMEOUT_MIN * 1000, config.TIMEOUT_MAX * 1000)
 
 function chatMessage() {
 	// 3 = 0, 1, 2
-	const choice = Math.floor(Math.random() * 6)
+	// Formula: max Choice + 2
+	const choice = Math.floor(Math.random() * 7)
 
 	// Message with ONE smile END
 	if (choice === 0) {
