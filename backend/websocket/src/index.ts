@@ -70,6 +70,27 @@ const messages = fs.readFileSync('messages/' + config.FILE, 'utf8').split('\n')
 
 console.log('Messages successfully loaded. There are', messages.length)
 
+// Load Twitch Smiles
+
+const smilesTwitch = fs.readFileSync('smiles/twitch.txt', 'utf8').split('\n')
+
+console.log(
+	'Smiles: Twitch successfully loaded. There are',
+	smilesTwitch.length
+)
+
+// Load 7TV Smiles
+
+const smiles7TV = fs.readFileSync('smiles/7tv.txt', 'utf8').split('\n')
+
+console.log('Smiles: 7TV successfully loaded. There are', smiles7TV.length)
+
+// Combined Smiles
+
+const smiles = smilesTwitch.concat(smiles7TV)
+
+console.log('Smiles: Total', smiles.length)
+
 const client = new tmi.Client({
 	options: { debug: false },
 	connection: {
@@ -114,8 +135,7 @@ const setRandomInterval = (minDelay: any, maxDelay: any) => {
 
 	const runInterval = () => {
 		const timeoutFunction = () => {
-			let randomIndex = Math.floor(Math.random() * messages.length)
-			client.say(config.CHANNEL, messages[randomIndex])
+			client.say(config.CHANNEL, chatMessage())
 			runInterval()
 		}
 
@@ -137,3 +157,62 @@ const setRandomInterval = (minDelay: any, maxDelay: any) => {
 }
 
 setRandomInterval(config.TIMEOUT_MIN * 1000, config.TIMEOUT_MAX * 1000)
+
+function chatMessage() {
+	// 3 = 0, 1, 2
+	// Formula: max Choice + 2
+	const choice = Math.floor(Math.random() * 7)
+
+	// Message with ONE smile END
+	if (choice === 0) {
+		const randomMessage = Math.floor(Math.random() * messages.length)
+		const message = messages[randomMessage]
+
+		const randomSmile = Math.floor(Math.random() * smiles.length)
+		const smile = smiles[randomSmile]
+
+		return message + ' ' + smile
+	}
+
+	// Message with ONE smile START
+	if (choice === 1) {
+		const randomMessage = Math.floor(Math.random() * messages.length)
+		const message = messages[randomMessage]
+
+		const randomSmile = Math.floor(Math.random() * smiles.length)
+		const smile = smiles[randomSmile]
+
+		return smile + ' ' + message
+	}
+
+	// One random smile
+	if (choice === 2) {
+		const randomSmile = Math.floor(Math.random() * smiles.length)
+		const smile = smiles[randomSmile]
+
+		return smile
+	}
+
+	// Two random smiles
+	if (choice === 3) {
+		return (
+			smiles[Math.floor(Math.random() * smiles.length)] +
+			' ' +
+			smiles[Math.floor(Math.random() * smiles.length)]
+		)
+	}
+
+	// Three identical smiles
+	if (choice === 4) {
+		const randomSmile = Math.floor(Math.random() * smiles.length)
+		const smile = smiles[randomSmile]
+
+		return smile + ' ' + smile + ' ' + smile
+	}
+
+	// Default message
+	const randomMessage = Math.floor(Math.random() * messages.length)
+	const message = messages[randomMessage]
+
+	return message
+}
